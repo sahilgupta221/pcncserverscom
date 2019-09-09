@@ -10,15 +10,17 @@ incomes = [
   { 'description': 'salary', 'amount': 5000 }
 ]
 
-os.environ["PATH"] += os.pathsep +  "/home/pi/.opam/default/bin/frenetics"
-os.environ["PATH"] += os.pathsep + "/home/pi/.opam/default/bin/frenetic.openflow"
 
 @app.route("/pcncserver")
 def get_pcnc_server_info():
-    myCmd = os.popen('frenetic help').read()
+    os.environ["PATH"] +=  ":/home/pi/.opam/default/bin/"
+#    os.environ["PATH"] += ":/home/pi/.opam/default/bin/"
+
+    myCmd = os.popen('frenetic -h').read()
     os.system(myCmd)
     app.logger.info(myCmd)
-    return myCmd
+    app.logger.info(os.environ["PATH"])
+    return str(myCmd)
 #    return jsonify(incomes)
 
 @app.route('/pcncserver', methods=['POST'])
