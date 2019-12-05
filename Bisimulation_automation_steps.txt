@@ -1,0 +1,22 @@
+Steps:
+1. The client process send surface syntax in JSON format to PCNC microservice.
+
+2. Packages installation:
+A. Now install Rust compiler using cargo builder to compile the "src/main.rs" program. (rust: main.rs==>pcnc_crypto binary)
+B. Dune package for compiling "src/nal.ml" OCaml program. (dune: nal.ml==>nal.exe)
+
+3. main.rs is responsible for public-private key pair generation. So we will generate key pair for network admin here.
+
+4. Wiring of policy file in a wire JSON file that contains authorization+verification material.
+A. Stage1.json:  Line 869 of nal.ml contain code which takes policy file and pcnc_crypto as input and generates stage1.json file in the example folder. stage1.json contains authentication logic and surface syntax policy program. Authentication logic example: Bob say John can install the policy p.
+B Stage2.json: Line 788 contain code that takes stage1.json can create stage2.json in the example folder. This wire JSON contains stage1.json information+ signatures (that Bob have signed this policy) 
+We need to make changes in line 869 for the dynamic inclusion of key material. Current function at this line creates a hadcoded stage 1. 
+We need to be able to create one for other programs
+
+5. Once stage2.json is created in example folder. Just run server-checks.py from pcnc root directory.
+If it passes the check then install the policy via a frenetic command in OVS switch.
+
+
+@Gopinath Swaminathan 
+Let meets tommorrow after our IoT security meeting. You might need to learn a bit of Ocaml and rust.
+I think most of the code is written in the pcnc repository. We need to add a code to generate different encryption material and making it work with our flask based client-server program.
